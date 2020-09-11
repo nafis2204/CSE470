@@ -1,6 +1,6 @@
 import tkinter as tk
 import sys
-sys.path.insert(1, 'E:/Bracu/semester 8/CSE 470 Software Engineering/Final_project/controller')
+import pickle
 
 
 
@@ -9,30 +9,21 @@ Width = 800
 
 def model_checker(list1):
     print(list1)
-    age=list1[0]
-    marital=list1[1].lower()
-    education=list1[2].lower()
-    default= list1[3].lower()
-    balance =list1[4]
-    housing=list1[5].lower()
-    loan=list1[6].lower()
-    day=list1[7]
-    campaign=list1[8]
-    pdays=list1[9]
-    previous=list1[10]
-
+    loaded_model=pickle.load(open('E:/Bracu/semester 8/CSE 470 Software Engineering/Final_project/model/file_final.sav', 'rb'))
+    result = loaded_model.predict(list1)
+    print(result)
 
 
 
 def check_fields():
     list1=[]
     list1.append(entry1.get())
-    list1.append(entry2.get())
-    list1.append(entry3.get())
-    list1.append(entry4.get())    
-    list1.append(entry5.get())    
-    list1.append(entry6.get())    
-    list1.append(entry7.get())
+    list1.append(entry2.get().lower())
+    list1.append(entry3.get().lower())
+    list1.append(entry4.get().lower())    
+    list1.append(entry5.get())
+    list1.append(entry6.get().lower())   
+    list1.append(entry7.get().lower())
     list1.append(entry8.get())
     list1.append(entry9.get())
     list1.append(entry10.get())
