@@ -1,38 +1,182 @@
 import tkinter as tk
-import sys
 import pickle
-
+import numpy as np
 
 
 Height=700
 Width = 800
+root = tk.Toplevel()
+root.title("Bank Management System")
 
+
+def output_window(value):
+    
+    root1 = tk.Toplevel()
+    string=""
+    if value==0:
+        string="The person is unlikely to be our depositor"
+    elif value==1:
+        string="The person is a potential depositor"
+    else:
+        string=value
+    canvas1 = tk.Canvas(root1, height=Height, width=Width)
+    canvas1.pack()
+    framex = tk.Frame(root1, bg='#2E0854', bd=5)
+    framex.place(relx=0.5, rely=0.30, relwidth=0.75, relheight=0.4, anchor='n')
+
+    labelx = tk.Label(framex,text=string, font=20,bd=4,bg="#FF8C00")
+    labelx.place(relwidth=1, relheight=1)
+
+    root1.mainloop()
+
+
+
+def data_model_builder(listx):
+    final_list=[]
+    listx=listx.reshape(1,11)
+    string="E:/Bracu/semester 8/CSE 470 Software Engineering/Final_project/model/"
+    #saved_knn_model
+    loaded_model1=pickle.load(open(string+'file_knn1.sav', 'rb'))
+    final_list.append(loaded_model1.predict(listx)) 
+    #saved model random forest
+    loaded_model2=pickle.load(open(string+'file_rf1.sav', 'rb'))
+    final_list.append(loaded_model2.predict(listx))
+    #saved decision tree
+    loaded_model3=pickle.load(open(string+'file_dt1.sav', 'rb'))
+    final_list.append(loaded_model3.predict(listx))
+    #saved naive bayes
+    loaded_model4=pickle.load(open(string+'file_nb1.sav', 'rb'))
+    final_list.append(loaded_model4.predict(listx))    
+    #saved support vector machine
+    loaded_model5=pickle.load(open(string+'file_svm1.sav', 'rb'))
+    final_list.append(loaded_model5.predict(listx))
+    #saved bagging
+    loaded_model6=pickle.load(open(string+'file_bg1.sav', 'rb'))
+    final_list.append(loaded_model6.predict(listx))
+    #saved extra tree
+    loaded_model7=pickle.load(open(string+'file_et1.sav', 'rb'))
+    final_list.append(loaded_model7.predict(listx))
+    #saved ada boost
+    loaded_model8=pickle.load(open(string+'file_adb1.sav', 'rb'))
+    final_list.append(loaded_model8.predict(listx))    
+    #saved gradient boost
+    loaded_model9=pickle.load(open(string+'file_gb1.sav', 'rb'))
+    final_list.append(loaded_model9.predict(listx))
+    
+    return final_list
+    
 def model_checker(list1):
-    print(list1)
+    finals=np.array(list1)
+    listx=data_model_builder(finals)
+    listx=np.array(listx)
+    listx=listx.reshape(1,9)
     loaded_model=pickle.load(open('E:/Bracu/semester 8/CSE 470 Software Engineering/Final_project/model/file_final.sav', 'rb'))
-    result = loaded_model.predict(list1)
+    result = loaded_model.predict(listx)
     print(result)
+    if result[0]==0:
+        output_window(0)
+    else:
+        output_window(1)
 
 
 
 def check_fields():
+
+    
     list1=[]
-    list1.append(entry1.get())
-    list1.append(entry2.get().lower())
-    list1.append(entry3.get().lower())
-    list1.append(entry4.get().lower())    
-    list1.append(entry5.get())
-    list1.append(entry6.get().lower())   
-    list1.append(entry7.get().lower())
-    list1.append(entry8.get())
-    list1.append(entry9.get())
-    list1.append(entry10.get())
-    list1.append(entry11.get())
+    
+    #entry1
+    try:
+        each= int(entry1.get())
+        list1.append(each)
+    except ValueError:
+        output_window("You should have entered number only")
+    
+    #entry2
+
+    each= entry2.get().lower().strip()
+    if entry2.get().lower().strip()=='single':
+        list1.append(int(0))
+    else:
+        list1.append(int(1))
+    
+    #entry3
+    each=entry3.get().lower().strip()
+    if each == "unknown" or each=="primary":
+        list1.append(int(0))
+    elif each =="seondary":
+        list1.append(int(1))
+    else:
+        list1.append(int(2))
+
+  
+    #entry4
+    each=entry4.get().lower().strip()
+    if each=='yes':
+        list1.append(int(0))
+    else:
+        list1.append(int(1))
+    
+    
+    #entry5
+    try:
+        each= int(entry5.get())
+        list1.append(each)
+    except ValueError:
+        output_window("You should have entered number only")   
+        
+        
+    #entry6
+    each=entry6.get().lower().strip()
+    if each=='yes':
+        list1.append(int(0))
+    else:
+        list1.append(int(1))        
+
+    #entry7
+    each=entry7.get().lower().strip()
+    if each=='yes':
+        list1.append(int(0))
+    else:
+        list1.append(int(1))        
+
+    #entry8
+    try:
+        each= int(entry8.get())
+        list1.append(each)
+    except ValueError:
+        output_window("You should have entered number only") 
+
+
+
+    #entry9
+    try:
+        each= int(entry9.get())
+        list1.append(each)
+    except ValueError:
+        output_window("You should have entered number only") 
+
+
+
+    #entry10
+    try:
+        each= int(entry10.get())
+        list1.append(each)
+    except ValueError:
+        output_window("You should have entered number only") 
+
+
+    #entry11
+    try:
+        each= int(entry11.get())
+        list1.append(each)
+    except ValueError:
+        output_window("You should have entered number only") 
+    
     
     model_checker(list1)
 
-root = tk.Toplevel()
-root.title("Bank Management System")
+
 
 canvas = tk.Canvas(root, height=Height, width=Width)
 canvas.pack()
@@ -171,3 +315,4 @@ button = tk.Button(frame12, text="Check", font=40, command=check_fields)
 button.place(relheight=1, relwidth=0.3)
 
 root.mainloop()
+
